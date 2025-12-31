@@ -161,7 +161,6 @@ async def websocket_endpoint_guide(websocket: WebSocket):
             if result.strip():
                 # Try to find where actual text content starts (after JSON blocks)
                 # Look for common patterns where response text begins
-                import re
                 # Remove leading JSON blocks more carefully
                 cleaned_result = re.sub(r'^\s*\{"[^"]*":\s*"[^"]*"\}\s*', '', result, count=3)
                 cleaned_result = cleaned_result.strip()
