@@ -126,6 +126,7 @@ async def websocket_endpoint_guide(websocket: WebSocket):
             graph_name = "Regulation_graph_without_rag"
             result = ""
             last_sent_content = ""
+
             debug_log = []
             async for chunk in client.runs.stream(thread_id, 
                                             graph_name, 
@@ -148,7 +149,7 @@ async def websocket_endpoint_guide(websocket: WebSocket):
                 if chunk.event == "messages":
                     # Debug logging
                     debug_log.append(str(chunk))
-                    
+
                     content = "".join(data_item['content'] for data_item in chunk.data if 'content' in data_item)
                     if content:
                         # Clean the chunk content directly
@@ -214,25 +215,25 @@ async def websocket_endpoint_guide(websocket: WebSocket):
                                                     },
                                                 config=config,
                                                 stream_mode="messages-tuple"):
-                    if chunk.event == "messages":
-                        content = "".join(data_item['content'] for data_item in chunk.data if 'content' in data_item)
-                        if content:
-                            # Clean the chunk content directly
-                            # Remove start JSON wrapper: {"response": "
-                            content = re.sub(r'^\s*\{"[^"]+":\s*"', '', content)
-                            # Remove end JSON wrapper: "}
-                            content = re.sub(r'"\}\s*$', '', content)
-                            
-                            result += content
-                            
-                            # Cleaned result is just result now (since we cleaned the inputs)
-                            cleaned_result = result
-                            
-                            # Calculate delta
-                            if len(cleaned_result) > len(last_sent_content):
-                                chunk_to_send = cleaned_result[len(last_sent_content):]
-                                await websocket.send_text(chunk_to_send)
-                                last_sent_content = cleaned_result
+                if chunk.event == "messages":
+                    content = "".join(data_item['content'] for data_item in chunk.data if 'content' in data_item)
+                    if content:
+                        # Clean the chunk content directly
+                        # Remove start JSON wrapper: {"response": "
+                        content = re.sub(r'^\s*\{"[^"]+":\s*"', '', content)
+                        # Remove end JSON wrapper: "}
+                        content = re.sub(r'"\}\s*$', '', content)
+                        
+                        result += content
+                        
+                        # Cleaned result is just result now
+                        cleaned_result = result
+                        
+                        # Calculate delta
+                        if len(cleaned_result) > len(last_sent_content):
+                            chunk_to_send = cleaned_result[len(last_sent_content):]
+                            await websocket.send_text(chunk_to_send)
+                            last_sent_content = cleaned_result
                 
                 # Update cleaned_result for the final check below
                 cleaned_result = last_sent_content
