@@ -88,79 +88,42 @@ async def websocket_endpoint_guide(websocket: WebSocket):
     
 
     try : 
-        raw_data = await websocket.receive_text()
-        # print(f"Received data: {raw_data}")
-        logger.info(f"Received data: {raw_data}")
-        
-        try:
-            data = json.loads(raw_data)
-        except json.JSONDecodeError:
-            await websocket.send_json({"error": "Invalid JSON format"})
-            return
-        
-        thread_id = data.get("thread_id")
-        message = data.get("message")
-        
-        if not thread_id:
-            await websocket.send_json({"error": "Thread ID is required"})
-            return # <--- Crucial Fix
-
-        if not message:
-            await websocket.send_json({"error": "Message is required"})
-            return
-        
-        logger.info("HI")
-
-        config = {'configurable': {
-                                    "user_id": "123",
-                                    # "response_model": "google_genai/gemini-2.0-flash",
-                                    # "response_model": "openai/gpt-4.1-nano",
-                                    "response_model": "openai/gpt-4.1-mini",
-                                    # "response_model_advance": "openai/gpt-4.1-mini",
-                                    "response_model_advance": "openai/gpt-4o",
-                                    }
-                  }
-        
-        graph_name = "Regulation_graph_without_rag"
-        result = ""
-        async for chunk in client.runs.stream(thread_id, 
-                                        graph_name, 
-                                        input={
-                                                "messages": [
-                                                    {
-                                                        "role": "user",
-                                                        "content": message
-                                                    }
-                                                ]
-                                            },
-                                        config=config,
-                                        # interrupt_before=["More_Info"],
-                                        stream_mode="messages-tuple"):
+        # Loop to handle multiple messages in the same connection
+        while True:
+            raw_data = await websocket.receive_text()
+            # print(f"Received data: {raw_data}")
+            logger.info(f"Received data: {raw_data}")
             
-            logger.info("==========Inside for loop==========")
+            try:
+                data = json.loads(raw_data)
+            except json.JSONDecodeError:
+                await websocket.send_json({"error": "Invalid JSON format"})
+                continue  # Don't close, wait for next message
+            
+            thread_id = data.get("thread_id")
+            message = data.get("message")
+            
+            if not thread_id:
+                await websocket.send_json({"error": "Thread ID is required"})
+                continue  # Don't close, wait for next message
 
-            # print(f"chunk : {chunk}")
-            logger.info(f"chunk : {chunk}")
+            if not message:
+                await websocket.send_json({"error": "Message is required"})
+                continue  # Don't close, wait for next message
             
-            if chunk.event == "messages":
-                result += "".join(data_item['content'] for data_item in chunk.data if 'content' in data_item)
-                # send_text = "".join(data_item['content'] for data_item in chunk.data if 'content' in data_item)
-                # await websocket.send_text(send_text)
-        
-        print("****"*25)
-        logger.info(f"raw result : {result}")
-        # result = re.sub(r"\{[^{}]*\}", "", result).strip()
-        result = result.rpartition('}')[-1].strip()
-        logger.info("****"*25)
-        logger.info(f"cleaned result : {result}")
-        logger.info("****"*25)
-        
-        # FIX: If result is empty (cold-start issue), retry once after waiting
-        if not result:
-            logger.info("Empty response detected, retrying after 1 second...")
-            await asyncio.sleep(1)  # Wait for LangGraph to warm up
+            logger.info("HI")
+
+            config = {'configurable': {
+                                        "user_id": "123",
+                                        # "response_model": "google_genai/gemini-2.0-flash",
+                                        # "response_model": "openai/gpt-4.1-nano",
+                                        "response_model": "openai/gpt-4.1-mini",
+                                        # "response_model_advance": "openai/gpt-4.1-mini",
+                                        "response_model_advance": "openai/gpt-4o",
+                                        }
+                      }
             
-            # Retry the stream
+            graph_name = "Regulation_graph_without_rag"
             result = ""
             async for chunk in client.runs.stream(thread_id, 
                                             graph_name, 
@@ -173,88 +136,74 @@ async def websocket_endpoint_guide(websocket: WebSocket):
                                                     ]
                                                 },
                                             config=config,
+                                            # interrupt_before=["More_Info"],
                                             stream_mode="messages-tuple"):
+                
+                logger.info("==========Inside for loop==========")
+
+                # print(f"chunk : {chunk}")
+                logger.info(f"chunk : {chunk}")
+                
                 if chunk.event == "messages":
                     result += "".join(data_item['content'] for data_item in chunk.data if 'content' in data_item)
+                    # send_text = "".join(data_item['content'] for data_item in chunk.data if 'content' in data_item)
+                    # await websocket.send_text(send_text)
             
-            # Clean the retry result
+            print("****"*25)
+            logger.info(f"raw result : {result}")
+            # result = re.sub(r"\{[^{}]*\}", "", result).strip()
             result = result.rpartition('}')[-1].strip()
-            logger.info(f"Retry result: {result}")
-        
-        # Safety check: if still empty, send a helpful message
-        if not result:
-            result = "I'm warming up. Please try your question again in a moment."
-        
-        await websocket.send_text(result)
-        
-        # cleaned_message = re.sub(r'^\s*\{"logic":.*?\}\s*', '', result, flags=re.DOTALL)
-        # cleaned_message = re.sub(r'^\s*\{"queries":.*?\}\s*', '', cleaned_message, flags=re.DOTALL)
-        # cleaned_message = re.sub(r'^\s*\{"type":.*?\}\s*', '', cleaned_message, flags=re.DOTALL)
-        # cleaned_message = re.sub(r'\s*\{.*"summary".*\}\s*$', '', cleaned_message, flags=re.DOTALL)  # Remove the trailing summary JSON
-        # for i in range(0, len(cleaned_message), 3):
-        #     chunk = cleaned_message[i:i+3]
-        #     await websocket.send_text(chunk)
-        #     await asyncio.sleep(0.001)
-
-
-        # thread_state = await client.threads.get_state(thread_id)
-
-
-        # if (len(thread_state["next"]) !=0 ):
-        #     if ( thread_state["next"][0] == "More_Info"):
-        #         print(f"Inside if statement")
-        #         result = ""
-        #         # Send a message to client requesting additional info
-        #         # await websocket.send_json({"type": "input_request", "message": "Please provide additional information:"})
-        #         await websocket.send_text("Please provide additional information...")
+            logger.info("****"*25)
+            logger.info(f"cleaned result : {result}")
+            logger.info("****"*25)
+            
+            # FIX: If result is empty (cold-start issue), retry once after waiting
+            if not result:
+                logger.info("Empty response detected, retrying after 1 second...")
+                await asyncio.sleep(1)  # Wait for LangGraph to warm up
                 
-        #         # Wait for the user's response
-        #         additional_info = await websocket.receive_text()
-        #         additional_info = json.loads(additional_info)["message"]
+                # Retry the stream
+                result = ""
+                async for chunk in client.runs.stream(thread_id, 
+                                                graph_name, 
+                                                input={
+                                                        "messages": [
+                                                            {
+                                                                "role": "user",
+                                                                "content": message
+                                                            }
+                                                        ]
+                                                    },
+                                                config=config,
+                                                stream_mode="messages-tuple"):
+                    if chunk.event == "messages":
+                        result += "".join(data_item['content'] for data_item in chunk.data if 'content' in data_item)
                 
-        #         copied_thread = await client.threads.copy(thread_id)
-        #         copied_thread_state = await client.threads.get_state(copied_thread['thread_id'])
-
-
-        #         states_to_fork = await client.threads.get_history(thread_id)
-        #         to_fork = states_to_fork[0]
-
-        #         # Combine original message with additional info
-        #         final_user_input = {"messages": HumanMessage(content=message + " " + additional_info, id=to_fork['values']['messages'][0]['id'])}
-                
-        #         forked_new_config = await client.threads.update_state(
-        #             thread_id,
-        #             final_user_input,
-        #             checkpoint_id=to_fork['checkpoint_id']
-        #             )
-                
-        #         print("Going to execute 2nd for loop...")
-        #         async for chunk in client.runs.stream(thread_id, 
-        #                                     graph_name, 
-        #                                     input=None,
-        #                                     config=config,
-        #                                     checkpoint_id=forked_new_config['checkpoint_id'],
-        #                                     stream_mode="messages-tuple"):
-        #             if chunk.event == "messages":
-        #                 result += "".join(data_item['content'] for data_item in chunk.data if 'content' in data_item)
-                        
-
-        #         cleaned_message = re.sub(r'^\s*\{"logic":.*?\}\s*', '', result, flags=re.DOTALL)
-        #         cleaned_message = re.sub(r'^\s*\{"queries":.*?\}\s*', '', cleaned_message, flags=re.DOTALL)
-        #         cleaned_message = re.sub(r'^\s*\{"type":.*?\}\s*', '', cleaned_message, flags=re.DOTALL)
-        #         for i in range(0, len(cleaned_message), 3):
-        #             chunk = cleaned_message[i:i+3]
-        #             await websocket.send_text(chunk)
-        #             await asyncio.sleep(0.001)
-
+                # Clean the retry result
+                result = result.rpartition('}')[-1].strip()
+                logger.info(f"Retry result: {result}")
+            
+            # Safety check: if still empty, send a helpful message
+            if not result:
+                result = "I'm warming up. Please try your question again in a moment."
+            
+            await websocket.send_text(result)
+            # Signal end of this response
+            await websocket.send_text("[DONE]")
                         
     except WebSocketDisconnect:
         print("Client disconnected")
     except Exception as e:
         print(f"Error: {e}")
-        await websocket.send_json({"error": str(e)})
+        try:
+            await websocket.send_json({"error": str(e)})
+        except:
+            pass  # Client already disconnected
     finally:
-        await websocket.close()
+        try:
+            await websocket.close()
+        except:
+            pass  # Already closed
         print("Task finished")
 
 
