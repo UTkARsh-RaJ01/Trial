@@ -155,6 +155,11 @@ async def websocket_endpoint_guide(websocket: WebSocket):
                         # Clean the chunk content directly
                         # Remove start JSON wrapper: {"response": "
                         content = re.sub(r'^\s*\{"[^"]+":\s*"', '', content)
+                        
+                        # Remove trailing JSON keys (metadata like "should_consider")
+                        # This matches pattern: ", "key":...
+                        content = re.sub(r'",\s*"[^"]+":.*', '', content)
+                        
                         # Remove end JSON wrapper: "}
                         content = re.sub(r'"\}\s*$', '', content)
                         
@@ -221,6 +226,11 @@ async def websocket_endpoint_guide(websocket: WebSocket):
                         # Clean the chunk content directly
                         # Remove start JSON wrapper: {"response": "
                         content = re.sub(r'^\s*\{"[^"]+":\s*"', '', content)
+                        
+                        # Remove trailing JSON keys (metadata like "should_consider")
+                        # This matches pattern: ", "key":...
+                        content = re.sub(r'",\s*"[^"]+":.*', '', content)
+                        
                         # Remove end JSON wrapper: "}
                         content = re.sub(r'"\}\s*$', '', content)
                         
