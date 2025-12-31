@@ -113,54 +113,21 @@ async def websocket_endpoint_guide(websocket: WebSocket):
             
             logger.info("HI")
 
-            config = {'configurable': {
-                                        "user_id": "123",
-                                        # "response_model": "google_genai/gemini-2.0-flash",
-                                        # "response_model": "openai/gpt-4.1-nano",
-                                        "response_model": "openai/gpt-4.1-mini",
-                                        # "response_model_advance": "openai/gpt-4.1-mini",
-                                        "response_model_advance": "openai/gpt-4o",
-                                        }
-                      }
-            
-            graph_name = "Regulation_graph_without_rag"
-            result = ""
-
-            async for chunk in client.runs.stream(thread_id, 
-                                            graph_name, 
-                                            input={
-                                                    "messages": [
-                                                        {
-                                                            "role": "user",
-                                                            "content": message
-                                                        }
-                                                    ]
-                                                },
-                                            config=config,
-                                            stream_mode="messages-tuple"):
+            # Inner try-except to handle per-message errors without breaking the connection
+            try:
+                config = {'configurable': {
+                                            "user_id": "123",
+                                            # "response_model": "google_genai/gemini-2.0-flash",
+                                            # "response_model": "openai/gpt-4.1-nano",
+                                            "response_model": "openai/gpt-4.1-mini",
+                                            # "response_model_advance": "openai/gpt-4.1-mini",
+                                            "response_model_advance": "openai/gpt-4o",
+                                            }
+                          }
                 
-                logger.info("==========Inside for loop==========")
-                logger.info(f"chunk : {chunk}")
-                
-                if chunk.event == "messages":
-                    result += "".join(data_item['content'] for data_item in chunk.data if 'content' in data_item)
-            
-            print("****"*25)
-            logger.info(f"raw result : {result}")
-            
-            # Clean using the proven working logic: grab everything AFTER the last '}'
-            cleaned_result = result.rpartition('}')[-1].strip()
-            
-            logger.info("****"*25)
-            logger.info(f"cleaned result : {cleaned_result}")
-            
-            # FIX: If cleaned_result is empty (cold-start issue), retry once after waiting
-            if not cleaned_result:
-                logger.info("Empty response detected, retrying after 1 second...")
-                await asyncio.sleep(1)  # Wait for LangGraph to warm up
-                
-                # Retry the stream
+                graph_name = "Regulation_graph_without_rag"
                 result = ""
+
                 async for chunk in client.runs.stream(thread_id, 
                                                 graph_name, 
                                                 input={
@@ -173,22 +140,67 @@ async def websocket_endpoint_guide(websocket: WebSocket):
                                                     },
                                                 config=config,
                                                 stream_mode="messages-tuple"):
+                    
+                    logger.info("==========Inside for loop==========")
+                    logger.info(f"chunk : {chunk}")
+                    
                     if chunk.event == "messages":
                         result += "".join(data_item['content'] for data_item in chunk.data if 'content' in data_item)
                 
-                # Clean again
+                print("****"*25)
+                logger.info(f"raw result : {result}")
+                
+                # Clean using the proven working logic: grab everything AFTER the last '}'
                 cleaned_result = result.rpartition('}')[-1].strip()
-                logger.info(f"retry cleaned result : {cleaned_result}")
+                
+                logger.info("****"*25)
+                logger.info(f"cleaned result : {cleaned_result}")
+                
+                # FIX: If cleaned_result is empty (cold-start issue), retry once after waiting
+                if not cleaned_result:
+                    logger.info("Empty response detected, retrying after 5 seconds...")
+                    await asyncio.sleep(5)  # Wait for LangGraph to warm up
+                    
+                    # Retry the stream
+                    result = ""
+                    async for chunk in client.runs.stream(thread_id, 
+                                                    graph_name, 
+                                                    input={
+                                                            "messages": [
+                                                                {
+                                                                    "role": "user",
+                                                                    "content": message
+                                                                }
+                                                            ]
+                                                        },
+                                                    config=config,
+                                                    stream_mode="messages-tuple"):
+                        if chunk.event == "messages":
+                            result += "".join(data_item['content'] for data_item in chunk.data if 'content' in data_item)
+                    
+                    # Clean again
+                    cleaned_result = result.rpartition('}')[-1].strip()
+                    logger.info(f"retry cleaned result : {cleaned_result}")
 
-            # Safety check: if still empty, send a helpful message
-            if not cleaned_result:
-                cleaned_result = "I'm warming up. Please try your question again in a moment."
-            
-            # Send the cleaned result once at the end
-            await websocket.send_text(cleaned_result)
-            
-            # Signal end of this response
-            await websocket.send_text("[DONE]")
+                # Safety check: if still empty, send a helpful message
+                if not cleaned_result:
+                    cleaned_result = "I'm warming up. Please try your question again in a moment."
+                
+                # Send the cleaned result once at the end
+                await websocket.send_text(cleaned_result)
+                
+                # Signal end of this response
+                await websocket.send_text("[DONE]")
+                
+            except Exception as msg_error:
+                # Log the error but don't break the loop - wait for next message
+                logger.error(f"Error processing message: {msg_error}")
+                try:
+                    await websocket.send_text(f"Error processing your message. Please try again.")
+                    await websocket.send_text("[DONE]")
+                except:
+                    pass  # WebSocket might be closed
+                continue  # Important: continue the loop instead of breaking
                         
     except WebSocketDisconnect:
         print("Client disconnected")
