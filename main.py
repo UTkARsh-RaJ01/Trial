@@ -61,7 +61,9 @@ async def create_thread_guide():
     # url ='https://iscc-eu-cal-guide-inline-context-production.up.railway.app/'
     
     # url ='https://iscc-eu-cal-guide-inline-context-without-rag-production.up.railway.app/'
-    url='http://iscc-eu-cal-guide-inline-context-without-rag.railway.internal:8080'
+    # url='http://iscc-eu-cal-guide-inline-context-without-rag.railway.internal:8080'
+    # Use public URL for Render deployment (can't access Railway internal network)
+    url='https://iscc-eu-cal-guide-inline-context-without-rag-production.up.railway.app'
     client = get_client(url=url)
     thread = await client.threads.create()
     return {"thread_id": thread["thread_id"]}
@@ -78,7 +80,9 @@ async def websocket_endpoint_guide(websocket: WebSocket):
 
     # url ='https://iscc-eu-cal-guide-inline-context-production.up.railway.app'
     # url ='https://iscc-eu-cal-guide-inline-context-without-rag-production.up.railway.app/'
-    url='http://iscc-eu-cal-guide-inline-context-without-rag.railway.internal:8080'
+    # url='http://iscc-eu-cal-guide-inline-context-without-rag.railway.internal:8080'
+    # Use public URL for Render deployment (can't access Railway internal network)
+    url='https://iscc-eu-cal-guide-inline-context-without-rag-production.up.railway.app'
 
     client = get_client(url=url)
     
