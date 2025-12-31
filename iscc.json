@@ -1,0 +1,1045 @@
+{
+    "Guide": {
+        "about": "This tool automatically calculates the greenhouse gas (GHG) intensity of corn as a biomass feedstock for producing transportation fuels according to the requirements of ISCC EU  and EU RED II regulation."
+    },
+    "General Information and data preparation": {
+        "general information": {
+            "Analysis Period": " 1 year "
+        },
+        "Farm description": {
+            "name": " Manish Corn Farm",
+            "location": " California, USA "
+        },
+        "Project Description": {
+            "brief": " This is a corn farm and we need to grow best organic corn "
+        }
+    },
+    "Company specific data": {
+        "Yeild": {
+            "Corn Production": {
+                "Amount": "12",
+                "Unit": "ton per hectare per year",
+                "Source": "enter source of input data",
+                "Notes": "AI reasoning"
+            },
+            "Moisture Content": {
+                "Amount": "15%",
+                "Unit": "%",
+                "Source": "enter source of input data",
+                "Notes": "add any notes"
+            },
+            "Fraction of crop area burnt annually": {
+                "Amount": "0",
+                "Unit": "hectare burnt per hectare total",
+                "Source": "enter source of input data",
+                "Notes": "add any notes"
+            },
+            "Straw yield (removed from the yield)": {
+                "Amount": "0",
+                "Unit": "kg dry matter per hectare per year",
+                "Source": "enter source of input data",
+                "Notes": "add any notes"
+            },
+            "Soil Type acidic or basic": {
+                "Amount": "acidic ",
+                "Unit": "N/A",
+                "Source": "enter source of input data",
+                "Notes": "add any notes"
+            }
+        },
+        "Liquid Fuel Consumption": {
+            "Diesel": {
+                "Amount": "12",
+                "Unit": "liter per hectare per year",
+                "Source": "enter source of input data",
+                "Notes": "add any notes"
+            },
+            "Gasoline": {
+                "Amount": "24",
+                "Unit": "liter per hectare per year",
+                "Source": "enter source of input data",
+                "Notes": "add any notes"
+            },
+            "Heavy fuel oil": {
+                "Amount": "2300%",
+                "Unit": "liter per hectare per year",
+                "Source": "enter source of input data",
+                "Notes": "add any notes"
+            },
+            "Methanol": {
+                "Amount": "4",
+                "Unit": "liter per hectare per year",
+                "Source": "enter source of input data",
+                "Notes": "add any notes"
+            },
+            "Straw yield (removed from the yield)": {
+                "Amount": "0",
+                "Unit": "kg dry matter per hectare per year",
+                "Source": "enter source of input data",
+                "Notes": "add any notes"
+            },
+            "Soil Type acidic or basic": {
+                "Amount": "acidic ",
+                "Unit": "N/A",
+                "Source": "enter source of input data",
+                "Notes": "add any notes"
+            }
+        },
+        "Gaseous Fuels Consumption": {
+            "LPG": "20 MJ per hectare per year",
+            "Natural Gas (HHV)": "12 MJ per hectare per year"
+        },
+        "Solid Fuels Consumption": {
+            "Hard coal": " 5 kg per hectare per year",
+            "Liginite": "5 kg per hectare per year",
+            "wood chip": "7 kg per hectare per year",
+            "wood pellets": "2 kg per hectare per year"
+        },
+        "Electricity": {
+            "Grid Electricity ": "0 kWh per hectare per year"
+        },
+        "Synthetic Nitrogen Fertilizers Consumption ": {},
+        "": {}
+    },
+    "Emission": {
+        "totalEmissions": {
+            "values": {
+                "co2": 18.05471859090909,
+                "ch4": 0,
+                "n2o": 0,
+                "co2e": 18.05471859090909
+            }
+        },
+        "fuelEmissions": {
+            "values": {
+                "co2": 18.05471859090909,
+                "ch4": 0,
+                "n2o": 0,
+                "co2e": 18.05471859090909
+            },
+            "liquidFuelEmissions": {
+                "values": {
+                    "co2": 18.05471859090909,
+                    "ch4": 0,
+                    "n2o": 0,
+                    "co2e": 18.05471859090909
+                },
+                "Diesel": {
+                    "values": {
+                        "co2": 4.244308883116884,
+                        "ch4": 0,
+                        "n2o": 0,
+                        "co2e": 4.244308883116884
+                    }
+                },
+                "Gasoline": {
+                    "values": {
+                        "co2": 5.199596883116883,
+                        "ch4": 0,
+                        "n2o": 0,
+                        "co2e": 5.199596883116883
+                    }
+                },
+                "Heavy fuel oil": {
+                    "values": {
+                        "co2": 8.610812824675325,
+                        "ch4": 0,
+                        "n2o": 0,
+                        "co2e": 8.610812824675325
+                    }
+                },
+                "Methanol": {
+                    "values": {
+                        "co2": 0,
+                        "ch4": 0,
+                        "n2o": 0,
+                        "co2e": 0
+                    }
+                }
+            },
+            "gaseousFuelEmissions": {
+                "values": {
+                    "co2": 0,
+                    "ch4": 0,
+                    "n2o": 0,
+                    "co2e": 0
+                },
+                "LPG": {
+                    "values": {
+                        "co2": 0,
+                        "ch4": 0,
+                        "n2o": 0,
+                        "co2e": 0
+                    }
+                },
+                "Natural Gas (Higher Heating Value)": {
+                    "values": {
+                        "co2": 0,
+                        "ch4": 0,
+                        "n2o": 0,
+                        "co2e": 0
+                    }
+                }
+            },
+            "solidFuelEmissions": {
+                "values": {
+                    "co2": 0,
+                    "ch4": 0,
+                    "n2o": 0,
+                    "co2e": 0
+                },
+                "Hard coal": {
+                    "values": {
+                        "co2": 0,
+                        "ch4": 0,
+                        "n2o": 0,
+                        "co2e": 0
+                    }
+                },
+                "Lignite": {
+                    "values": {
+                        "co2": 0,
+                        "ch4": 0,
+                        "n2o": 0,
+                        "co2e": 0
+                    }
+                },
+                "Wood chips": {
+                    "values": {
+                        "co2": 0,
+                        "ch4": 0,
+                        "n2o": 0,
+                        "co2e": 0
+                    }
+                },
+                "Wood pellets": {
+                    "values": {
+                        "co2": 0,
+                        "ch4": 0,
+                        "n2o": 0,
+                        "co2e": 0
+                    }
+                }
+            }
+        },
+        "fertilizerEmissions": {
+            "values": {
+                "co2": 0,
+                "ch4": 0,
+                "n2o": 0,
+                "co2e": 0
+            },
+            "syntheticNitrogenFertilizerEmissions": {
+                "values": {
+                    "co2": 0,
+                    "ch4": 0,
+                    "n2o": 0,
+                    "co2e": 0
+                },
+                "Synthetic N-fertilizer": {
+                    "values": {
+                        "co2": 0,
+                        "ch4": 0,
+                        "n2o": 0,
+                        "co2e": 0
+                    }
+                },
+                "Ammonium nitrate": {
+                    "values": {
+                        "co2": 0,
+                        "ch4": 0,
+                        "n2o": 0,
+                        "co2e": 0
+                    }
+                },
+                "Ammonium sulphate": {
+                    "values": {
+                        "co2": 0,
+                        "ch4": 0,
+                        "n2o": 0,
+                        "co2e": 0
+                    }
+                },
+                "Ammonium nitrate sulphate": {
+                    "values": {
+                        "co2": 0,
+                        "ch4": 0,
+                        "n2o": 0,
+                        "co2e": 0
+                    }
+                },
+                "Anhydrous ammonia": {
+                    "values": {
+                        "co2": 0,
+                        "ch4": 0,
+                        "n2o": 0,
+                        "co2e": 0
+                    }
+                },
+                "Calcium ammonium nitrate": {
+                    "values": {
+                        "co2": 0,
+                        "ch4": 0,
+                        "n2o": 0,
+                        "co2e": 0
+                    }
+                },
+                "Calcium nitrate": {
+                    "values": {
+                        "co2": 0,
+                        "ch4": 0,
+                        "n2o": 0,
+                        "co2e": 0
+                    }
+                },
+                "Urea": {
+                    "values": {
+                        "co2": 0,
+                        "ch4": 0,
+                        "n2o": 0,
+                        "co2e": 0
+                    }
+                },
+                "Urea ammonium nitrate": {
+                    "values": {
+                        "co2": 0,
+                        "ch4": 0,
+                        "n2o": 0,
+                        "co2e": 0
+                    }
+                }
+            },
+            "organicNitrogenFertilizerEmissions": {
+                "values": {
+                    "co2": 0,
+                    "ch4": 0,
+                    "n2o": 0,
+                    "co2e": 0
+                },
+                "Manure": {
+                    "values": {
+                        "co2": 0,
+                        "ch4": 0,
+                        "n2o": 0,
+                        "co2e": 0
+                    }
+                },
+                "Biogas digestate": {
+                    "values": {
+                        "co2": 0,
+                        "ch4": 0,
+                        "n2o": 0,
+                        "co2e": 0
+                    }
+                }
+            },
+            "p2o5FertilizerEmissions": {
+                "values": {
+                    "co2": 0,
+                    "ch4": 0,
+                    "n2o": 0,
+                    "co2e": 0
+                },
+                "P2O5 fertlizer": {
+                    "values": {
+                        "co2": 0,
+                        "ch4": 0,
+                        "n2o": 0,
+                        "co2e": 0
+                    }
+                },
+                "Triple superphosphate": {
+                    "values": {
+                        "co2": 0,
+                        "ch4": 0,
+                        "n2o": 0,
+                        "co2e": 0
+                    }
+                },
+                "Rock phosphate 21% P2O5 23% SO3": {
+                    "values": {
+                        "co2": 0,
+                        "ch4": 0,
+                        "n2o": 0,
+                        "co2e": 0
+                    }
+                },
+                "Mono ammonium phosphate (MAP) 11% N 52% P2O5": {
+                    "values": {
+                        "co2": 0,
+                        "ch4": 0,
+                        "n2o": 0,
+                        "co2e": 0
+                    }
+                },
+                "Di ammonium phosphate (DAP) 18% N 46% P2O5": {
+                    "values": {
+                        "co2": 0,
+                        "ch4": 0,
+                        "n2o": 0,
+                        "co2e": 0
+                    }
+                }
+            },
+            "k2oFertilizerEmissions": {
+                "values": {
+                    "co2": 0,
+                    "ch4": 0,
+                    "n2o": 0,
+                    "co2e": 0
+                },
+                "K2O fertlizer": {
+                    "values": {
+                        "co2": 0,
+                        "ch4": 0,
+                        "n2o": 0,
+                        "co2e": 0
+                    }
+                },
+                "Muriate of Potash (MOP) 60% K2O": {
+                    "values": {
+                        "co2": 0,
+                        "ch4": 0,
+                        "n2o": 0,
+                        "co2e": 0
+                    }
+                }
+            },
+            "otherFertilizerEmissions": {
+                "values": {
+                    "co2": 0,
+                    "ch4": 0,
+                    "n2o": 0,
+                    "co2e": 0
+                },
+                "NPK 15-15-15": {
+                    "values": {
+                        "co2": 0,
+                        "ch4": 0,
+                        "n2o": 0,
+                        "co2e": 0
+                    }
+                },
+                "MgO": {
+                    "values": {
+                        "co2": 0,
+                        "ch4": 0,
+                        "n2o": 0,
+                        "co2e": 0
+                    }
+                },
+                "Sodium fertiliser": {
+                    "values": {
+                        "co2": 0,
+                        "ch4": 0,
+                        "n2o": 0,
+                        "co2e": 0
+                    }
+                }
+            }
+        },
+        "otherInputEmissions": {
+            "plantProtectionProductEmissions": {
+                "values": {
+                    "co2": 0,
+                    "ch4": 0,
+                    "n2o": 0,
+                    "co2e": 0
+                },
+                "Pesticides": {
+                    "values": {
+                        "co2": 0,
+                        "ch4": 0,
+                        "n2o": 0,
+                        "co2e": 0
+                    }
+                }
+            },
+            "seedMaterialEmissions": {
+                "values": {
+                    "co2": 0,
+                    "ch4": 0,
+                    "n2o": 0,
+                    "co2e": 0
+                },
+                "Seeds-maize": {
+                    "values": {
+                        "co2": 0,
+                        "ch4": 0,
+                        "n2o": 0,
+                        "co2e": 0
+                    }
+                }
+            }
+        },
+        "liquidFuelsEmission": {
+            "co2": 18.05471859090909,
+            "ch4": 0,
+            "n2o": 0,
+            "co2e": 18.05471859090909
+        },
+        "gaseousFuelsEmission": {
+            "co2": 0,
+            "ch4": 0,
+            "n2o": 0,
+            "co2e": 0
+        },
+        "solidFuelsEmission": {
+            "co2": 0,
+            "ch4": 0,
+            "n2o": 0,
+            "co2e": 0
+        },
+        "totalFuelEmissions": {
+            "co2": 18.05471859090909,
+            "ch4": 0,
+            "n2o": 0,
+            "co2e": 18.05471859090909
+        },
+        "syntheticNitrogenFertilizersEmission": {
+            "co2": 0,
+            "ch4": 0,
+            "n2o": 0,
+            "co2e": 0
+        },
+        "organicNitrogenFertilizersEmission": {
+            "co2": 0,
+            "ch4": 0,
+            "n2o": 0,
+            "co2e": 0
+        },
+        "p2o5FertilizersEmission": {
+            "co2": 0,
+            "ch4": 0,
+            "n2o": 0,
+            "co2e": 0
+        },
+        "k2oFertilizersEmission": {
+            "co2": 0,
+            "ch4": 0,
+            "n2o": 0,
+            "co2e": 0
+        },
+        "otherFertilizersEmission": {
+            "co2": 0,
+            "ch4": 0,
+            "n2o": 0,
+            "co2e": 0
+        },
+        "totalFertilizerEmissions": {
+            "co2": 0,
+            "ch4": 0,
+            "n2o": 0,
+            "co2e": 0
+        },
+        "plantProtectionProductsEmission": {
+            "co2": 0,
+            "ch4": 0,
+            "n2o": 0,
+            "co2e": 0
+        },
+        "seedMaterialsEmission": {
+            "co2": 0,
+            "ch4": 0,
+            "n2o": 0,
+            "co2e": 0
+        }
+    },
+    "acidificationLimingEmissions": {
+        "nitrogenFertilizerEmissions": {
+            "nitrateFertilizers": {
+                "values": {
+                    "co2": 0,
+                    "ch4": 0,
+                    "n2o": 0,
+                    "co2e": 0
+                }
+            },
+            "ureaFertilizers": {
+                "values": {
+                    "co2": 0,
+                    "ch4": 0,
+                    "n2o": 0,
+                    "co2e": 0
+                }
+            },
+            "total": {
+                "values": {
+                    "co2": 0,
+                    "ch4": 0,
+                    "n2o": 0,
+                    "co2e": 0
+                }
+            }
+        },
+        "limingEmissions": {
+            "values": {
+                "co2": 0,
+                "ch4": 0,
+                "n2o": 0,
+                "co2e": 0
+            }
+        },
+        "netEmissions": {
+            "values": {
+                "co2": 0,
+                "ch4": 0,
+                "n2o": 0,
+                "co2e": 0
+            }
+        }
+    },
+    "farmingN2OEmissions": {
+        "cropResidueN": {
+            "values": {
+                "n2o": 0,
+                "co2e": 159.60207815745423
+            },
+            "slope": 1.03,
+            "intercept": 0.61,
+            "aboveGroundResiduesDryMatter": 17821.099906456,
+            "annualFreshYieldCorn": 19050.87954,
+            "dryMatterFractionHarvested": 0.86,
+            "ratioAboveGroundResiduesToHarvested": 1.085,
+            "fractionCropAreaBurnt": 0,
+            "fractionResiduesRemoved": 0,
+            "combustionFactor": 0.8,
+            "nContentAboveGroundResidues": 0.006,
+            "nContentBelowGroundResidues": 0.007,
+            "ratioBelowGroundResiduesToHarvested": 0.22,
+            "cropResidueN": 159.60207815745423
+        },
+        "directN2OEmissions": {
+            "values": {
+                "n2o": 2.5080326567599953,
+                "co2e": 747.3937317144786
+            },
+            "appliedSyntheticN": 0,
+            "appliedOrganicN": 0,
+            "cropResidueN": 159.60207815745423,
+            "emissionFactorDirectN2O": 0.01,
+            "directN2ONEmissions": 1.5960207815745424,
+            "directN2OEmissions": 2.5080326567599953
+        },
+        "indirectN2OEmissions": {
+            "values": {
+                "n2o": 0.5643073477709988,
+                "co2e": 168.16358963575763
+            },
+            "volatilization": {
+                "values": {
+                    "n2o": 0,
+                    "co2e": 0
+                },
+                "fractionSyntheticNVolatilizes": 0.1,
+                "fractionOrganicNVolatilizes": 0.2,
+                "amountVolatized": 0,
+                "emissionFactorVolatilization": 0.01,
+                "indirectN2ONVolatilization": 0,
+                "indirectN2OVolatilization": 0
+            },
+            "leachingRunoff": {
+                "values": {
+                    "n2o": 0.5643073477709988,
+                    "co2e": 168.16358963575763
+                },
+                "fractionNLeachedRunoff": 0.3,
+                "amountLeachedRunoff": 47.88062344723627,
+                "emissionFactorLeachingRunoff": 0.0075,
+                "indirectN2ONLeachingRunoff": 0.35910467585427197,
+                "indirectN2OLeachingRunoff": 0.5643073477709988
+            },
+            "totalIndirectN2ONEmissions": 0.35910467585427197,
+            "totalIndirectN2OEmissions": 0.5643073477709988
+        },
+        "totalN2OEmissions": {
+            "values": {
+                "n2o": 3.072340004530994,
+                "co2e": 915.5573213502362
+            },
+            "totalN2ONEmissions": 1.9551254574288144,
+            "totalN2OEmissions": 3.072340004530994
+        },
+        "n2oGWP": 298
+    },
+    "standardData": {
+        "Fuel Density Data": {
+            "columnNames": [
+                "value",
+                "unit",
+                "reference"
+            ],
+            "entries": {
+                "Diesel": {
+                    "value": 832,
+                    "unit": "kg/m3",
+                    "reference": ""
+                },
+                "Gasoline": {
+                    "value": 745,
+                    "unit": "kg/m3",
+                    "reference": ""
+                },
+                "Heavyfueloil": {
+                    "value": 970,
+                    "unit": "kg/m3",
+                    "reference": ""
+                },
+                "Methanol": {
+                    "value": 793,
+                    "unit": "kg/m3",
+                    "reference": ""
+                }
+            }
+        },
+        "LHV Data": {
+            "columnNames": [
+                "value",
+                "unit",
+                "reference",
+                "actualName"
+            ],
+            "entries": {
+                "Diesel": {
+                    "value": 43.1,
+                    "unit": "MJ/kg",
+                    "reference": "Annex IX IR 2022/996",
+                    "actualName": "Diesel"
+                },
+                "Gasoline": {
+                    "value": 43.2,
+                    "unit": "MJ/kg",
+                    "reference": "Annex IX IR 2022/996",
+                    "actualName": "Gasoline"
+                },
+                "Heavyfueloil": {
+                    "value": 40.5,
+                    "unit": "MJ/kg",
+                    "reference": "Annex IX IR 2022/996",
+                    "actualName": "Heavy fuel oil"
+                },
+                "Methanol": {
+                    "value": 20,
+                    "unit": "MJ/kg",
+                    "reference": "Annex IX IR 2022/996",
+                    "actualName": "Methanol"
+                },
+                "Hardcoal": {
+                    "value": 26.5,
+                    "unit": "MJ/kg",
+                    "reference": "Annex IX IR 2022/996",
+                    "actualName": "Hard coal"
+                },
+                "Lignite": {
+                    "value": 9.2,
+                    "unit": "MJ/kg",
+                    "reference": "Annex IX IR 2022/996",
+                    "actualName": "Lignite"
+                },
+                "Woodchips": {
+                    "value": 19,
+                    "unit": "MJ/kg",
+                    "reference": "Annex IX IR 2022/996",
+                    "actualName": "Wood chips"
+                },
+                "Woodpellets": {
+                    "value": 19,
+                    "unit": "MJ/kg",
+                    "reference": "Annex IX IR 2022/996",
+                    "actualName": "Wood pellets"
+                }
+            }
+        },
+        "Fuels GHG Emission Factors": {
+            "columnNames": [
+                "co2",
+                "ch4",
+                "n2o",
+                "co2e",
+                "source",
+                "actualName"
+            ],
+            "entries": {
+                "Diesel": {
+                    "co2": 95.1,
+                    "ch4": 0,
+                    "n2o": 0,
+                    "co2e": 95.1,
+                    "source": "Annex IX IR 2022/996",
+                    "actualName": "Diesel"
+                },
+                "Gasoline": {
+                    "co2": 93.3,
+                    "ch4": 0,
+                    "n2o": 0,
+                    "co2e": 93.3,
+                    "source": "Annex IX IR 2022/996",
+                    "actualName": "Gasoline"
+                },
+                "Heavyfueloil": {
+                    "co2": 94.2,
+                    "ch4": 0,
+                    "n2o": 0,
+                    "co2e": 94.2,
+                    "source": "Annex IX IR 2022/996",
+                    "actualName": "Heavy Fuel Oil"
+                },
+                "Methanol": {
+                    "co2": 97.1,
+                    "ch4": 0,
+                    "n2o": 0,
+                    "co2e": 97.1,
+                    "source": "Annex IX IR 2022/996",
+                    "actualName": "Methanol"
+                },
+                "LPG": {
+                    "co2": 66.3,
+                    "ch4": 0,
+                    "n2o": 0,
+                    "co2e": 66.3,
+                    "source": "",
+                    "actualName": "LPG"
+                },
+                "Average": {
+                    "co2": 47.81,
+                    "ch4": 0.92,
+                    "n2o": 0.35,
+                    "co2e": 52.71,
+                    "source": "Calculated Average",
+                    "actualName": "Average Value"
+                },
+                "Hardcoal": {
+                    "co2": 102.6,
+                    "ch4": 0.39,
+                    "n2o": 0,
+                    "co2e": 113.47,
+                    "source": "",
+                    "actualName": "Hard Coal"
+                },
+                "Lignite": {
+                    "co2": 116.7,
+                    "ch4": 0,
+                    "n2o": 0,
+                    "co2e": 116.77,
+                    "source": "",
+                    "actualName": "Lignite"
+                },
+                "Woodchips": {
+                    "co2": 0,
+                    "ch4": 0,
+                    "n2o": 0,
+                    "co2e": 0,
+                    "source": "",
+                    "actualName": "Wood Chips"
+                },
+                "Woodpellets": {
+                    "co2": 0,
+                    "ch4": 0,
+                    "n2o": 0,
+                    "co2e": 0,
+                    "source": "",
+                    "actualName": "Wood Pellets"
+                }
+            }
+        },
+        "Fertilizer GHG Emission Factors": {
+            "columnNames": [
+                "co2",
+                "ch4",
+                "n2o",
+                "co2e",
+                "source",
+                "actualName"
+            ],
+            "entries": {
+                "SyntheticN-fertilizer": {
+                    "co2": 3876.5,
+                    "ch4": 2.17,
+                    "n2o": 2.15,
+                    "co2e": 4507.54,
+                    "source": "ISCC EU",
+                    "actualName": "Synthetic nitrogen fertilizer"
+                },
+                "Ammoniumnitrate": {
+                    "co2": 2671,
+                    "ch4": 6.9,
+                    "n2o": 2.1,
+                    "co2e": 3420.7,
+                    "source": "ISCC EU",
+                    "actualName": "Ammonium nitrate fertilizer"
+                },
+                "Ammoniumsulphate": {
+                    "co2": 2560,
+                    "ch4": 6.5,
+                    "n2o": 0,
+                    "co2e": 2742,
+                    "source": "ISCC EU",
+                    "actualName": "Ammonium sulphate fertilizer"
+                },
+                "Ammoniumnitratesulphate": {
+                    "co2": 2561,
+                    "ch4": 8.9,
+                    "n2o": 1.3,
+                    "co2e": 3154.7,
+                    "source": "ISCC EU",
+                    "actualName": "Ammonium nitrate sulphate fertilizer"
+                },
+                "Anhydrousammonia": {
+                    "co2": 2662,
+                    "ch4": 6.8,
+                    "n2o": 0,
+                    "co2e": 2852.4,
+                    "source": "ISCC EU",
+                    "actualName": "Anhydrous ammonia fertilizer"
+                },
+                "Calciumammoniumnitrate": {
+                    "co2": 2863,
+                    "ch4": 7.3,
+                    "n2o": 2.1,
+                    "co2e": 3623.9,
+                    "source": "ISCC EU",
+                    "actualName": "Calcium ammonium nitrate fertilizer"
+                },
+                "Calciumnitrate": {
+                    "co2": 2653,
+                    "ch4": 7,
+                    "n2o": 5.1,
+                    "co2e": 4200.5,
+                    "source": "ISCC EU",
+                    "actualName": "Calcium nitrate fertilizer"
+                },
+                "Urea": {
+                    "co2": 1703,
+                    "ch4": 9.3,
+                    "n2o": 0,
+                    "co2e": 1963.4,
+                    "source": "ISCC EU",
+                    "actualName": "Urea fertilizer"
+                },
+                "Ureaammoniumnitrate": {
+                    "co2": 2182,
+                    "ch4": 7.5,
+                    "n2o": 1.1,
+                    "co2e": 2683.5,
+                    "source": "ISCC EU",
+                    "actualName": "Urea ammonium nitrate fertilizer"
+                },
+                "Average": {
+                    "co2": 2089.65,
+                    "ch4": 4.17,
+                    "n2o": 1.19,
+                    "co2e": 2496.58,
+                    "source": "Calculated Average",
+                    "actualName": "Average Value"
+                }
+            }
+        },
+        "Crop Residue Calculation Factors": {
+            "columnNames": [
+                "value"
+            ],
+            "entries": {
+                "Slope": {
+                    "value": 1.03,
+                    "notes": "Slope for corn"
+                },
+                "Intercept": {
+                    "value": 0.61,
+                    "notes": "Intercept for corn"
+                },
+                "Harvested Dry Matter Fraction": {
+                    "value": 0.86,
+                    "notes": "Dry matter fraction of harvested product for corn"
+                },
+                "AboveGroundResidues to Harvested ratio": {
+                    "value": 1.085,
+                    "notes": "Ratio of above-ground residues to harvested for corn"
+                },
+                "Combustion Factor": {
+                    "value": 0.8,
+                    "notes": "Combustion factor for corn"
+                },
+                "N - Content Above Ground Residues": {
+                    "value": 0.006,
+                    "notes": "N content of above-ground residues for corn"
+                },
+                "N - Content Below Ground Residues": {
+                    "value": 0.007,
+                    "notes": "N content of below-ground residues for corn"
+                },
+                "Below Ground Residues to Harvested ratio": {
+                    "value": 0.22,
+                    "notes": "Ratio of below-ground residues to harvested for corn"
+                }
+            }
+        },
+        "N2O Emission Factors": {
+            "columnNames": [
+                "value"
+            ],
+            "entries": {
+                "Emission Factor Direct N2O": {
+                    "value": 0.01,
+                    "notes": "Emission factor for direct N2O emissions (1%)"
+                },
+                "Fraction of Synthetic N-Volatilizes": {
+                    "value": 0.1,
+                    "notes": "Fraction of synthetic N fertilizer that volatilizes (10%)"
+                },
+                "Fraction Organic N Volatilizes": {
+                    "value": 0.2,
+                    "notes": "Fraction of organic N fertilizer that volatilizes (20%)"
+                },
+                "Emission Factor Volatilization": {
+                    "value": 0.01,
+                    "notes": "Emission factor for volatilization (1%)"
+                },
+                "Fraction N Leached Runoff": {
+                    "value": 0.3,
+                    "notes": "Fraction of N lost through leaching and runoff (30%)"
+                },
+                "Emission Factor Leaching Runoff": {
+                    "value": 0.0075,
+                    "notes": "Emission factor for leaching and runoff (0.75%)"
+                }
+            }
+        },
+        "Conversion Factors": {
+            "columnNames": [
+                "value"
+            ],
+            "entries": {
+                "N2O N Molecular Weight Ratio": {
+                    "value": 1.5714285714285714,
+                    "notes": "Ratio of molecular weights N2O/N (44/28)"
+                }
+            }
+        },
+        "Unit Conversion": {
+            "columnNames": [
+                "value"
+            ],
+            "entries": {
+                "Mass unit convertion kg to shortton": {
+                    "value": 907.18474,
+                    "notes": "Conversion factor kg to short ton"
+                },
+                "Mass unit convertion shorton to kg": {
+                    "value": 0.001102311310924388,
+                    "notes": "Conversion factor short ton to kg"
+                }
+            }
+        },
+        "Global Warming Potentials": {
+            "columnNames": [
+                "value"
+            ],
+            "entries": {
+                "N2O Global Warming Potential": {
+                    "value": 298,
+                    "notes": "Global warming potential of N2O (over 100 years)"
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,160 @@
+[
+  {
+    "category_title": " Liquid Fuels Consumption",
+    "unit": "unknown",
+    "fields": [
+      {
+        "field_title": "Diesel ",
+        "unit": "gallons/acre",
+        "custom": false,
+        "inputSource": "manual",
+        "additionalNotes": "",
+        "required": true,
+        "inputType": "number"
+      },
+      {
+        "field_title": "Gasoline ",
+        "unit": "gallons/acre",
+        "custom": false,
+        "inputSource": "manual",
+        "additionalNotes": "",
+        "required": true,
+        "inputType": "number"
+      },
+      {
+        "field_title": "Heavy fuel oil",
+        "unit": "unknown",
+        "custom": true,
+        "inputSource": "manual",
+        "additionalNotes": "",
+        "required": false,
+        "inputType": "number"
+      },
+      {
+        "field_title": "Methanol ",
+        "unit": "unknown",
+        "custom": true,
+        "inputSource": "manual",
+        "additionalNotes": "",
+        "required": false,
+        "inputType": "number"
+      },
+      {
+        "field_title": "Ethanol ",
+        "unit": "liters/year",
+        "custom": true,
+        "inputSource": "manual",
+        "additionalNotes": "",
+        "required": true,
+        "inputType": "number"
+      }
+    ],
+    "addCustomFieldButton": true,
+    "addCustomFieldButtonText": "Add",
+    "addCustomFieldButtonDescription": "Add another  liquid fuels consumption",
+    "dropDownOptions": [
+      "Others (Specify)"
+    ],
+    "defaultFieldCount": 3
+  },
+  {
+    "category_title": "Corn Yield",
+    "unit": "kg/ha/year",
+    "fields": [
+      {
+        "field_title": "Corn production (wet basis)",
+        "unit": "kg/ha/year",
+        "custom": false,
+        "inputSource": "ai",
+        "additionalNotes": "",
+        "required": true,
+        "inputType": "number"
+      },
+      {
+        "field_title": "Moisture content",
+        "unit": "%",
+        "custom": false,
+        "inputSource": "ai",
+        "additionalNotes": "",
+        "required": true,
+        "inputType": "number"
+      },
+      {
+        "field_title": "Fraction of crop area burned",
+        "unit": "",
+        "custom": false,
+        "inputSource": "manual",
+        "additionalNotes": "",
+        "required": false,
+        "inputType": "number"
+      },
+      {
+        "field_title": "Straw yield removed",
+        "unit": "",
+        "custom": false,
+        "inputSource": "manual",
+        "additionalNotes": "",
+        "required": false,
+        "inputType": "number"
+      },
+      {
+        "field_title": "Soil condition",
+        "unit": "",
+        "custom": false,
+        "inputSource": "manual",
+        "additionalNotes": "",
+        "required": false,
+        "inputType": "number"
+      }
+    ]
+  },
+  {
+    "category_title": " Gaseous Fuels Consumption",
+    "unit": "",
+    "fields": [
+      {
+        "field_title": "Lpg ",
+        "unit": "",
+        "custom": false,
+        "inputSource": "ai",
+        "additionalNotes": "",
+        "required": false,
+        "inputType": "number"
+      },
+      {
+        "field_title": "Natural gas on higher heating value (hhv) basis:",
+        "unit": "",
+        "custom": false,
+        "inputSource": "ai",
+        "additionalNotes": "",
+        "required": false,
+        "inputType": "number"
+      },
+      {
+        "field_title": "Biogas ",
+        "unit": "",
+        "custom": false,
+        "inputSource": "ai",
+        "additionalNotes": "",
+        "required": false,
+        "inputType": "number"
+      },
+      {
+        "field_title": "Hydrogen ",
+        "unit": "",
+        "custom": false,
+        "inputSource": "ai",
+        "additionalNotes": "",
+        "required": false,
+        "inputType": "number"
+      }
+    ],
+    "addCustomFieldButton": true,
+    "addCustomFieldButtonText": "Add",
+    "addCustomFieldButtonDescription": "Add another  gaseous fuels consumption",
+    "dropDownOptions": [
+      "Others (Specify)"
+    ],
+    "defaultFieldCount": 3
+  }
+]

@@ -1,0 +1,31 @@
+# FastAPI and related
+fastapi
+python-multipart
+uvicorn[standard]
+websockets  
+
+# Document Processing
+PyMuPDF  # fitz
+python-docx
+openpyxl
+tabulate
+
+# Data Processing
+pandas
+numpy
+
+# LangChain and related
+langchain
+langgraph
+langchain-core
+langchain-community
+langgraph_sdk
+langchain_openai
+langgraph_cli
+tiktoken  # Required for RecursiveCharacterTextSplitter
+
+# Utilities
+python-jose  # For JWT handling
+passlib  # For password hashing
+python_dotenv  
+pydantic
