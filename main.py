@@ -150,18 +150,30 @@ async def websocket_endpoint_guide(websocket: WebSocket):
                     # await websocket.send_text(send_text)
             
             print("****"*25)
-            logger.info(f"raw result : {result}")
+            logger.info(f"raw result length: {len(result)}")
+            logger.info(f"raw result : {result[:500]}...")  # First 500 chars
             
-            # Remove JSON metadata blocks that appear at the start of the response
-            # These are agent internal metadata like {"logic":...}, {"queries":...}, etc.
-            cleaned_result = re.sub(r'^\s*\{[^{}]*\}\s*', '', result)  # Remove first JSON block
-            cleaned_result = re.sub(r'^\s*\{[^{}]*\}\s*', '', cleaned_result)  # Remove second if exists
-            cleaned_result = re.sub(r'^\s*\{[^{}]*\}\s*', '', cleaned_result)  # Remove third if exists
-            cleaned_result = cleaned_result.strip()
+            # Less aggressive cleanup - try to preserve the actual response
+            # Only remove JSON blocks at the very start
+            cleaned_result = result
+            
+            # If the entire result looks like JSON-only without text, keep it simple
+            if result.strip():
+                # Try to find where actual text content starts (after JSON blocks)
+                # Look for common patterns where response text begins
+                import re
+                # Remove leading JSON blocks more carefully
+                cleaned_result = re.sub(r'^\s*\{"[^"]*":\s*"[^"]*"\}\s*', '', result, count=3)
+                cleaned_result = cleaned_result.strip()
+                
+                # If we removed everything, just use the original result
+                if not cleaned_result and result:
+                    logger.info("Regex removed all content, using original result")
+                    cleaned_result = result
             
             logger.info("****"*25)
-            logger.info(f"cleaned result : {cleaned_result}")
-            logger.info("****"*25)
+            logger.info(f"cleaned result length: {len(cleaned_result)}")
+            logger.info(f"cleaned result : {cleaned_result[:500]}...")
             
             # FIX: If cleaned_result is empty (cold-start issue), retry once after waiting
             if not cleaned_result:
@@ -185,12 +197,12 @@ async def websocket_endpoint_guide(websocket: WebSocket):
                     if chunk.event == "messages":
                         result += "".join(data_item['content'] for data_item in chunk.data if 'content' in data_item)
                 
-                # Clean the retry result with same regex approach
-                cleaned_result = re.sub(r'^\s*\{[^{}]*\}\s*', '', result)
-                cleaned_result = re.sub(r'^\s*\{[^{}]*\}\s*', '', cleaned_result)
-                cleaned_result = re.sub(r'^\s*\{[^{}]*\}\s*', '', cleaned_result)
+                # Clean the retry result with less aggressive approach
+                cleaned_result = re.sub(r'^\s*\{"[^"]*":\s*"[^"]*"\}\s*', '', result, count=3)
                 cleaned_result = cleaned_result.strip()
-                logger.info(f"Retry result: {cleaned_result}")
+                if not cleaned_result and result:
+                    cleaned_result = result  # Fall back to original
+                logger.info(f"Retry result length: {len(cleaned_result)}")
             
             # Safety check: if still empty, send a helpful message
             if not cleaned_result:
