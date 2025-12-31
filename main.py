@@ -151,14 +151,20 @@ async def websocket_endpoint_guide(websocket: WebSocket):
             
             print("****"*25)
             logger.info(f"raw result : {result}")
-            # result = re.sub(r"\{[^{}]*\}", "", result).strip()
-            result = result.rpartition('}')[-1].strip()
+            
+            # Remove JSON metadata blocks that appear at the start of the response
+            # These are agent internal metadata like {"logic":...}, {"queries":...}, etc.
+            cleaned_result = re.sub(r'^\s*\{[^{}]*\}\s*', '', result)  # Remove first JSON block
+            cleaned_result = re.sub(r'^\s*\{[^{}]*\}\s*', '', cleaned_result)  # Remove second if exists
+            cleaned_result = re.sub(r'^\s*\{[^{}]*\}\s*', '', cleaned_result)  # Remove third if exists
+            cleaned_result = cleaned_result.strip()
+            
             logger.info("****"*25)
-            logger.info(f"cleaned result : {result}")
+            logger.info(f"cleaned result : {cleaned_result}")
             logger.info("****"*25)
             
-            # FIX: If result is empty (cold-start issue), retry once after waiting
-            if not result:
+            # FIX: If cleaned_result is empty (cold-start issue), retry once after waiting
+            if not cleaned_result:
                 logger.info("Empty response detected, retrying after 1 second...")
                 await asyncio.sleep(1)  # Wait for LangGraph to warm up
                 
@@ -179,15 +185,18 @@ async def websocket_endpoint_guide(websocket: WebSocket):
                     if chunk.event == "messages":
                         result += "".join(data_item['content'] for data_item in chunk.data if 'content' in data_item)
                 
-                # Clean the retry result
-                result = result.rpartition('}')[-1].strip()
-                logger.info(f"Retry result: {result}")
+                # Clean the retry result with same regex approach
+                cleaned_result = re.sub(r'^\s*\{[^{}]*\}\s*', '', result)
+                cleaned_result = re.sub(r'^\s*\{[^{}]*\}\s*', '', cleaned_result)
+                cleaned_result = re.sub(r'^\s*\{[^{}]*\}\s*', '', cleaned_result)
+                cleaned_result = cleaned_result.strip()
+                logger.info(f"Retry result: {cleaned_result}")
             
             # Safety check: if still empty, send a helpful message
-            if not result:
-                result = "I'm warming up. Please try your question again in a moment."
+            if not cleaned_result:
+                cleaned_result = "I'm warming up. Please try your question again in a moment."
             
-            await websocket.send_text(result)
+            await websocket.send_text(cleaned_result)
             # Signal end of this response
             await websocket.send_text("[DONE]")
                         
