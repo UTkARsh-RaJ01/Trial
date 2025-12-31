@@ -148,14 +148,16 @@ async def websocket_endpoint_guide(websocket: WebSocket):
                 if chunk.event == "messages":
                     content = "".join(data_item['content'] for data_item in chunk.data if 'content' in data_item)
                     if content:
+                        # Clean the chunk content directly
+                        # Remove start JSON wrapper: {"response": "
+                        content = re.sub(r'^\s*\{"[^"]+":\s*"', '', content)
+                        # Remove end JSON wrapper: "}
+                        content = re.sub(r'"\}\s*$', '', content)
+                        
                         result += content
                         
-                        # Clean the result: remove ALL JSON-like patterns (including interleaved ones)
-                        # The user reported interleaved JSONs like {"response":"..."}{"response":"..."}
-                        # We use a regex that matches {"response": ...} or generic JSON blocks
-                        cleaned_result = re.sub(r'\{"response"\s*:\s*".*?"\}', '', result, flags=re.DOTALL)
-                        # Also clean generic start-of-string JSONs just in case
-                        cleaned_result = re.sub(r'^\s*(\{.*?\})\s*', '', cleaned_result, flags=re.DOTALL)
+                        # Cleaned result is just result now
+                        cleaned_result = result
                         
                         # Calculate delta
                         if len(cleaned_result) > len(last_sent_content):
@@ -212,11 +214,16 @@ async def websocket_endpoint_guide(websocket: WebSocket):
                     if chunk.event == "messages":
                         content = "".join(data_item['content'] for data_item in chunk.data if 'content' in data_item)
                         if content:
+                            # Clean the chunk content directly
+                            # Remove start JSON wrapper: {"response": "
+                            content = re.sub(r'^\s*\{"[^"]+":\s*"', '', content)
+                            # Remove end JSON wrapper: "}
+                            content = re.sub(r'"\}\s*$', '', content)
+                            
                             result += content
                             
-                            # Clean the result: remove ALL JSON-like patterns
-                            cleaned_result = re.sub(r'\{"response"\s*:\s*".*?"\}', '', result, flags=re.DOTALL)
-                            cleaned_result = re.sub(r'^\s*(\{.*?\})\s*', '', cleaned_result, flags=re.DOTALL)
+                            # Cleaned result is just result now (since we cleaned the inputs)
+                            cleaned_result = result
                             
                             # Calculate delta
                             if len(cleaned_result) > len(last_sent_content):
