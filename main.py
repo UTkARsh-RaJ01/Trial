@@ -125,6 +125,7 @@ async def websocket_endpoint_guide(websocket: WebSocket):
             
             graph_name = "Regulation_graph_without_rag"
             result = ""
+            last_sent_content = ""
             async for chunk in client.runs.stream(thread_id, 
                                             graph_name, 
                                             input={
@@ -145,9 +146,22 @@ async def websocket_endpoint_guide(websocket: WebSocket):
                 logger.info(f"chunk : {chunk}")
                 
                 if chunk.event == "messages":
-                    result += "".join(data_item['content'] for data_item in chunk.data if 'content' in data_item)
-                    # send_text = "".join(data_item['content'] for data_item in chunk.data if 'content' in data_item)
-                    # await websocket.send_text(send_text)
+                    content = "".join(data_item['content'] for data_item in chunk.data if 'content' in data_item)
+                    if content:
+                        result += content
+                        
+                        # Clean the result: remove ALL JSON-like patterns (including interleaved ones)
+                        # The user reported interleaved JSONs like {"response":"..."}{"response":"..."}
+                        # We use a regex that matches {"response": ...} or generic JSON blocks
+                        cleaned_result = re.sub(r'\{"response"\s*:\s*".*?"\}', '', result, flags=re.DOTALL)
+                        # Also clean generic start-of-string JSONs just in case
+                        cleaned_result = re.sub(r'^\s*(\{.*?\})\s*', '', cleaned_result, flags=re.DOTALL)
+                        
+                        # Calculate delta
+                        if len(cleaned_result) > len(last_sent_content):
+                            chunk_to_send = cleaned_result[len(last_sent_content):]
+                            await websocket.send_text(chunk_to_send)
+                            last_sent_content = cleaned_result
             
             print("****"*25)
             logger.info(f"raw result length: {len(result)}")
@@ -180,7 +194,9 @@ async def websocket_endpoint_guide(websocket: WebSocket):
                 await asyncio.sleep(1)  # Wait for LangGraph to warm up
                 
                 # Retry the stream
+                # Retry the stream
                 result = ""
+                last_sent_content = "" # Reset for retry
                 async for chunk in client.runs.stream(thread_id, 
                                                 graph_name, 
                                                 input={
@@ -194,20 +210,31 @@ async def websocket_endpoint_guide(websocket: WebSocket):
                                                 config=config,
                                                 stream_mode="messages-tuple"):
                     if chunk.event == "messages":
-                        result += "".join(data_item['content'] for data_item in chunk.data if 'content' in data_item)
+                        content = "".join(data_item['content'] for data_item in chunk.data if 'content' in data_item)
+                        if content:
+                            result += content
+                            
+                            # Clean the result: remove ALL JSON-like patterns
+                            cleaned_result = re.sub(r'\{"response"\s*:\s*".*?"\}', '', result, flags=re.DOTALL)
+                            cleaned_result = re.sub(r'^\s*(\{.*?\})\s*', '', cleaned_result, flags=re.DOTALL)
+                            
+                            # Calculate delta
+                            if len(cleaned_result) > len(last_sent_content):
+                                chunk_to_send = cleaned_result[len(last_sent_content):]
+                                await websocket.send_text(chunk_to_send)
+                                last_sent_content = cleaned_result
                 
-                # Clean the retry result with less aggressive approach
-                cleaned_result = re.sub(r'^\s*\{"[^"]*":\s*"[^"]*"\}\s*', '', result, count=3)
-                cleaned_result = cleaned_result.strip()
-                if not cleaned_result and result:
-                    cleaned_result = result  # Fall back to original
-                logger.info(f"Retry result length: {len(cleaned_result)}")
-            
+                # Update cleaned_result for the final check below
+                cleaned_result = last_sent_content
+
             # Safety check: if still empty, send a helpful message
             if not cleaned_result:
                 cleaned_result = "I'm warming up. Please try your question again in a moment."
-            
-            await websocket.send_text(cleaned_result)
+                await websocket.send_text(cleaned_result)
+            elif len(cleaned_result) > len(last_sent_content):
+                 # Send any remaining part that wasn't streamed
+                 chunk_to_send = cleaned_result[len(last_sent_content):]
+                 await websocket.send_text(chunk_to_send)
             # Signal end of this response
             await websocket.send_text("[DONE]")
                         
