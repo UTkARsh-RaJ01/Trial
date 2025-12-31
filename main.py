@@ -126,6 +126,7 @@ async def websocket_endpoint_guide(websocket: WebSocket):
             graph_name = "Regulation_graph_without_rag"
             result = ""
             last_sent_content = ""
+            debug_log = []
             async for chunk in client.runs.stream(thread_id, 
                                             graph_name, 
                                             input={
@@ -137,7 +138,6 @@ async def websocket_endpoint_guide(websocket: WebSocket):
                                                     ]
                                                 },
                                             config=config,
-                                            # interrupt_before=["More_Info"],
                                             stream_mode="messages-tuple"):
                 
                 logger.info("==========Inside for loop==========")
@@ -146,6 +146,9 @@ async def websocket_endpoint_guide(websocket: WebSocket):
                 logger.info(f"chunk : {chunk}")
                 
                 if chunk.event == "messages":
+                    # Debug logging
+                    debug_log.append(str(chunk))
+                    
                     content = "".join(data_item['content'] for data_item in chunk.data if 'content' in data_item)
                     if content:
                         # Clean the chunk content directly
@@ -234,9 +237,10 @@ async def websocket_endpoint_guide(websocket: WebSocket):
                 # Update cleaned_result for the final check below
                 cleaned_result = last_sent_content
 
-            # Safety check: if still empty, send a helpful message
+            # Safety check: if still empty, send a helpful message with DEBUG info
             if not cleaned_result:
-                cleaned_result = "I'm warming up. Please try your question again in a moment."
+                debug_info = "".join(debug_log)[:1000]
+                cleaned_result = f"I'm warming up. Debug info: {debug_info}"
                 await websocket.send_text(cleaned_result)
             elif len(cleaned_result) > len(last_sent_content):
                  # Send any remaining part that wasn't streamed
