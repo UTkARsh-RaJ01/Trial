@@ -74,13 +74,6 @@ async def websocket_endpoint_guide(websocket: WebSocket):
     """WebSocket endpoint for interactive chat with the LangGraph model"""
     await websocket.accept()
     
-    # url = 'http://localhost:8123'
-    # url = 'http://iscc-eu-cal-guide-inline-context.railway.internal:8080'
-
-
-    # url ='https://iscc-eu-cal-guide-inline-context-production.up.railway.app'
-    # url ='https://iscc-eu-cal-guide-inline-context-without-rag-production.up.railway.app/'
-    # url='http://iscc-eu-cal-guide-inline-context-without-rag.railway.internal:8080'
     # Use public URL for Render deployment (can't access Railway internal network)
     url='https://iscc-eu-cal-guide-inline-context-without-rag-production.up.railway.app'
 
@@ -88,119 +81,94 @@ async def websocket_endpoint_guide(websocket: WebSocket):
     
 
     try : 
-        # Loop to handle multiple messages in the same connection
-        while True:
-            raw_data = await websocket.receive_text()
-            # print(f"Received data: {raw_data}")
-            logger.info(f"Received data: {raw_data}")
-            
-            try:
-                data = json.loads(raw_data)
-            except json.JSONDecodeError:
-                await websocket.send_json({"error": "Invalid JSON format"})
-                continue  # Don't close, wait for next message
-            
-            thread_id = data.get("thread_id")
-            message = data.get("message")
-            
-            if not thread_id:
-                await websocket.send_json({"error": "Thread ID is required"})
-                continue  # Don't close, wait for next message
+        raw_data = await websocket.receive_text()
+        logger.info(f"Received data: {raw_data}")
+        
+        try:
+            data = json.loads(raw_data)
+        except json.JSONDecodeError:
+            await websocket.send_json({"error": "Invalid JSON format"})
+            return
+        
+        thread_id = data.get("thread_id")
+        message = data.get("message")
+        
+        if not thread_id:
+            await websocket.send_json({"error": "Thread ID is required"})
+            return
 
-            if not message:
-                await websocket.send_json({"error": "Message is required"})
-                continue  # Don't close, wait for next message
+        if not message:
+            await websocket.send_json({"error": "Message is required"})
+            return
+        
+        logger.info("HI")
+
+        config = {'configurable': {
+                                    "user_id": "123",
+                                    "response_model": "openai/gpt-4.1-mini",
+                                    "response_model_advance": "openai/gpt-4o",
+                                    }
+                  }
+        
+        graph_name = "Regulation_graph_without_rag"
+        result = ""
+        async for chunk in client.runs.stream(thread_id, 
+                                        graph_name, 
+                                        input={
+                                                "messages": [
+                                                    {
+                                                        "role": "user",
+                                                        "content": message
+                                                    }
+                                                ]
+                                            },
+                                        config=config,
+                                        stream_mode="messages-tuple"):
             
-            logger.info("HI")
-
-            # Inner try-except to handle per-message errors without breaking the connection
-            try:
-                config = {'configurable': {
-                                            "user_id": "123",
-                                            # "response_model": "google_genai/gemini-2.0-flash",
-                                            # "response_model": "openai/gpt-4.1-nano",
-                                            "response_model": "openai/gpt-4.1-mini",
-                                            # "response_model_advance": "openai/gpt-4.1-mini",
-                                            "response_model_advance": "openai/gpt-4o",
-                                            }
-                          }
-                
-                graph_name = "Regulation_graph_without_rag"
-                result = ""
-
-                async for chunk in client.runs.stream(thread_id, 
-                                                graph_name, 
-                                                input={
-                                                        "messages": [
-                                                            {
-                                                                "role": "user",
-                                                                "content": message
-                                                            }
-                                                        ]
-                                                    },
-                                                config=config,
-                                                stream_mode="messages-tuple"):
-                    
-                    logger.info("==========Inside for loop==========")
-                    logger.info(f"chunk : {chunk}")
-                    
-                    if chunk.event == "messages":
-                        result += "".join(data_item['content'] for data_item in chunk.data if 'content' in data_item)
-                
-                print("****"*25)
-                logger.info(f"raw result : {result}")
-                
-                # Clean using the proven working logic: grab everything AFTER the last '}'
-                cleaned_result = result.rpartition('}')[-1].strip()
-                
-                logger.info("****"*25)
-                logger.info(f"cleaned result : {cleaned_result}")
-                
-                # FIX: If cleaned_result is empty (cold-start issue), retry once after waiting
-                if not cleaned_result:
-                    logger.info("Empty response detected, retrying after 5 seconds...")
-                    await asyncio.sleep(5)  # Wait for LangGraph to warm up
-                    
-                    # Retry the stream
-                    result = ""
-                    async for chunk in client.runs.stream(thread_id, 
-                                                    graph_name, 
-                                                    input={
-                                                            "messages": [
-                                                                {
-                                                                    "role": "user",
-                                                                    "content": message
-                                                                }
-                                                            ]
-                                                        },
-                                                    config=config,
-                                                    stream_mode="messages-tuple"):
-                        if chunk.event == "messages":
-                            result += "".join(data_item['content'] for data_item in chunk.data if 'content' in data_item)
-                    
-                    # Clean again
-                    cleaned_result = result.rpartition('}')[-1].strip()
-                    logger.info(f"retry cleaned result : {cleaned_result}")
-
-                # Safety check: if still empty, send a helpful message
-                if not cleaned_result:
-                    cleaned_result = "I'm warming up. Please try your question again in a moment."
-                
-                # Send the cleaned result once at the end
-                await websocket.send_text(cleaned_result)
-                
-                # Signal end of this response
-                await websocket.send_text("[DONE]")
-                
-            except Exception as msg_error:
-                # Log the error but don't break the loop - wait for next message
-                logger.error(f"Error processing message: {msg_error}")
-                try:
-                    await websocket.send_text(f"Error processing your message. Please try again.")
-                    await websocket.send_text("[DONE]")
-                except:
-                    pass  # WebSocket might be closed
-                continue  # Important: continue the loop instead of breaking
+            logger.info("==========Inside for loop==========")
+            logger.info(f"chunk : {chunk}")
+            
+            if chunk.event == "messages":
+                result += "".join(data_item['content'] for data_item in chunk.data if 'content' in data_item)
+        
+        print("****"*25)
+        logger.info(f"raw result : {result}")
+        cleaned_result = result.rpartition('}')[-1].strip()
+        logger.info("****"*25)
+        logger.info(f"cleaned result : {cleaned_result}")
+        logger.info("****"*25)
+        
+        # FIX: If cleaned_result is empty (cold-start issue), retry once after 5 seconds
+        if not cleaned_result:
+            logger.info("Empty response detected, retrying after 5 seconds...")
+            await asyncio.sleep(5)  # Wait for LangGraph to warm up
+            
+            # Retry the stream
+            result = ""
+            async for chunk in client.runs.stream(thread_id, 
+                                            graph_name, 
+                                            input={
+                                                    "messages": [
+                                                        {
+                                                            "role": "user",
+                                                            "content": message
+                                                        }
+                                                    ]
+                                                },
+                                            config=config,
+                                            stream_mode="messages-tuple"):
+                if chunk.event == "messages":
+                    result += "".join(data_item['content'] for data_item in chunk.data if 'content' in data_item)
+            
+            cleaned_result = result.rpartition('}')[-1].strip()
+            logger.info(f"retry cleaned result : {cleaned_result}")
+        
+        # Safety check: if still empty, send a helpful message
+        if not cleaned_result:
+            cleaned_result = "I'm warming up. Please try your question again in a moment."
+        
+        await websocket.send_text(cleaned_result)
+        await websocket.send_text("[DONE]")
                         
     except WebSocketDisconnect:
         print("Client disconnected")
@@ -209,12 +177,12 @@ async def websocket_endpoint_guide(websocket: WebSocket):
         try:
             await websocket.send_json({"error": str(e)})
         except:
-            pass  # Client already disconnected
+            pass
     finally:
         try:
             await websocket.close()
         except:
-            pass  # Already closed
+            pass
         print("Task finished")
 
 
@@ -599,7 +567,7 @@ async def websocket_endpoint_report(websocket: WebSocket):
 @app.post("/create_thread_research")
 async def create_thread_research(input_json:Optional[Dict[str,Any]]=None):
     """Create a new thread for the LangGraph model"""
-    url = 'http://climate_research_agent.railway.internal:8080'
+    url = 'http://climate_research_agent.railway.internal:8123'
     client = get_client(url=url)
     thread = await client.threads.create()
     return {"thread_id": thread["thread_id"]}
@@ -652,7 +620,7 @@ async def websocket_endpoint_research(websocket: WebSocket):
     """WebSocket endpoint for interactive chat with the LangGraph model"""
     await websocket.accept()
     
-    url = 'http://climate_research_agent.railway.internal:8080'
+    url = 'http://climate_research_agent.railway.internal:8123'
     client = get_client(url=url)
     
 
