@@ -110,7 +110,7 @@ async def websocket_endpoint_guide(websocket: WebSocket):
                                     }
                   }
         
-        graph_name = "Regulation_graph_without_rag"
+        graph_name = "retrieval_graph"
         result = ""
         async for chunk in client.runs.stream(thread_id, 
                                         graph_name, 
